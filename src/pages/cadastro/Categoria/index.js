@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
@@ -31,6 +31,17 @@ function CadastroCategoria() {
       value,
     );
   }
+
+  useEffect(() => {
+    const URL_TOP = 'http://localhost:8080/categories';
+    fetch(URL_TOP)
+      .then(async (respostaDoServidor) => {
+        const resposta = await respostaDoServidor.json();
+        setCategories([
+          ...resposta,
+        ]);
+      });
+  }, []); // [] é quando queremos que esse efeito seja carregado -> vazio = 1 vez;
 
   return (
     <PageDefault>
@@ -81,9 +92,15 @@ function CadastroCategoria() {
         </Button>
       </form>
 
+      {categories.length === 0 && (
+      <div>
+        Loading...
+      </div>
+      )}
+
       <ul>
         {categories.map((category) => (
-          <li key={`${category.nome}`}>
+          <li key={`${category.categoryName}`}>
             {category.categoryName}
           </li>
         ))}
