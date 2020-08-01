@@ -1,53 +1,56 @@
-import React from 'react';
-import styled from 'styled-components'
-import Menu from '../../components/Menu'
-import dadosIniciais from '../../data/dados_iniciais.json';
+import React, { useEffect, useState } from 'react';
 import BannerMain from '../../components/BannerMain';
 import Carousel from '../../components/Carousel';
-import Footer from '../../components/Footer';
-
-const AppWrapper = styled.div`
-  background-color: var(--grayDark);
-`;
+import PageDefault from '../../components/PageDefault';
+import categoriesRepository from '../../repositories/categories';
 
 function Home() {
+  const [initialData, setInitialData] = useState([]);
+
+  useEffect(() => {
+    // http://localhost:8080/categories?_embed=videos
+    categoriesRepository.getAllWithVideos()
+      .then((categoriesWithVideos) => {
+        // console.log(categoriesWithVideos);
+        setInitialData(categoriesWithVideos);
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err.message);
+      });
+  }, []);
+
   return (
-    <AppWrapper style={{ background: "#141414" }}>
-      <Menu />
+    <PageDefault paddingAll={0}>
+      {initialData.length === 0 && (<div>Loading...</div>)}
 
-      <BannerMain
-        videoTitle={dadosIniciais.categorias[0].videos[0].titulo}
-        url={dadosIniciais.categorias[0].videos[0].url}
-        videoDescription={"O que é Front-end? Trabalhando na área os termos HTML, CSS e JavaScript fazem parte da rotina das desenvolvedoras e desenvolvedores. Mas o que eles fazem, afinal? Descubra com a Vanessa!"}
-      />
+      {initialData.map((category, indice) => {
+        if (indice === 0) {
+          return (
+            <div key={category.id}>
+              <BannerMain
+                videoTitle={initialData[0].videos[0].title}
+                url={initialData[0].videos[0].url}
+                videoDescription="O que é Front-end? Trabalhando na área os termos HTML, CSS e JavaScript fazem parte da rotina das desenvolvedoras e desenvolvedores. Mas o que eles fazem, afinal? Descubra com a Vanessa!"
+              />
 
-      <Carousel
-        ignoreFirstVideo
-        category={dadosIniciais.categorias[0]}
-      />
+              <Carousel
+                ignoreFirstVideo
+                category={initialData[0]}
+              />
+            </div>
+          );
+        }
 
-      <Carousel
-        category={dadosIniciais.categorias[1]}
-      />
+        return (
+          <Carousel
+            key={category.id}
+            category={category}
+          />
+        );
+      })}
 
-      <Carousel
-        category={dadosIniciais.categorias[2]}
-      />      
-
-      <Carousel
-        category={dadosIniciais.categorias[3]}
-      />      
-
-      <Carousel
-        category={dadosIniciais.categorias[4]}
-      />      
-
-      <Carousel
-        category={dadosIniciais.categorias[5]}
-      />      
-
-      <Footer />
-    </AppWrapper>
+    </PageDefault>
   );
 }
 
