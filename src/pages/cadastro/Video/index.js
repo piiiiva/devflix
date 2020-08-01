@@ -4,6 +4,7 @@ import PageDefault from '../../../components/PageDefault';
 import useForm from '../../../hooks/useForm';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
+import videosRepository from '../../../repositories/videos';
 
 const CadastroVideo = () => {
   const history = useHistory();
@@ -20,7 +21,15 @@ const CadastroVideo = () => {
       <form onSubmit={(event) => {
         event.preventDefault();
 
-        history.push('/');
+        videosRepository.create({
+          title: values.title,
+          url: values.url,
+          categoryId: 1,
+        })
+          .then(() => {
+            console.log('Cadastro com sucesso!');
+            history.push('/');
+          });
       }}
       >
         <FormField
