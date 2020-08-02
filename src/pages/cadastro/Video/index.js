@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import useForm from '../../../hooks/useForm';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
 import videosRepository from '../../../repositories/videos';
+import categoriesRepository from '../../../repositories/categories';
 
 const CadastroVideo = () => {
   const history = useHistory();
+  const [categories, setCategories] = useState([]);
+  const categoryTitles = categories.map(({ title }) => title); // nao entendi essa sintaxe
   const { handleChange, values } = useForm({
-    title: 'Vídeo Padrão',
-    url: 'https://www.youtube.com/watch?v=XqmoLdSszoc',
-    category: 'Front End',
+    title: '',
+    url: '',
+    category: '',
   });
+
+  useEffect(() => {
+    categoriesRepository
+      .getAll() // buscando as categorias do servidor
+      .then((categoriesFromServer) => {
+        setCategories(categoriesFromServer);
+      });
+  }, []);
 
   return (
     <PageDefault>
@@ -21,10 +32,15 @@ const CadastroVideo = () => {
       <form onSubmit={(event) => {
         event.preventDefault();
 
+        // eslint-disable-next-line arrow-body-style
+        const choosedCategory = categories.find((category) => {
+          return category.title === values.category;
+        });
+
         videosRepository.create({
           title: values.title,
           url: values.url,
-          categoryId: 1,
+          categoryId: choosedCategory.id,
         })
           .then(() => {
             console.log('Cadastro com sucesso!');
@@ -43,7 +59,7 @@ const CadastroVideo = () => {
         <FormField
           label="URL"
           type="url"
-          name="title"
+          name="url"
           value={values.url}
           onChange={handleChange}
         />
@@ -51,9 +67,10 @@ const CadastroVideo = () => {
         <FormField
           label="Categoria"
           type="text"
-          name="url"
+          name="category"
           value={values.category}
           onChange={handleChange}
+          suggestions={categoryTitles}
         />
 
         <Button type="submit">

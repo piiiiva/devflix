@@ -192,6 +192,24 @@
       "url": "https://www.youtube.com/watch?v=XqmoLdSszoc",
       "categoryId": 1,
       "id": 25
+    },
+    {
+      "title": "Video Teste",
+      "url": "https://www.youtube.com/watch?v=XqmoLdSszoc",
+      "categoryId": 1,
+      "id": 26
+    },
+    {
+      "title": "Vídeo Teste",
+      "url": "https://www.youtube.com/watch?v=XqmoLdSszoc",
+      "categoryId": 2,
+      "id": 27
+    },
+    {
+      "title": "Princípios SOLID em uma API REST com Node.js e TypeScript",
+      "url": "https://www.youtube.com/watch?v=vAV4Vy4jfkc&t=79s",
+      "categoryId": 2,
+      "id": 28
     }
   ]
 }
