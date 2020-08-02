@@ -7,7 +7,7 @@ function create(objetoDoVideo) {
   return fetch(`${URL_VIDEOS}?_embed=videos`, {
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
+      'Content-type': 'application/json',
     },
     body: JSON.stringify(objetoDoVideo),
   })
