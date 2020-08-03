@@ -12,7 +12,7 @@ function CadastroCategoria() {
     color: '',
   };
 
-  const { handleChange, values, clearForm } = useForm(initialValues);
+  const { handleChange, values, clearForm } = useForm({ initialValues });
 
   const [categories, setCategories] = useState([]);
 
